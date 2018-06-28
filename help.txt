@@ -10,7 +10,7 @@ help - Outputs this help text...but you knew that
 
 how many - counts how many successful or failed Windows loads there have been in a given time frame
 >	Sub-Commands:
->		*successful/failed* * - determines whether you are going to count the successful or failed Windows loads
+>		*successful/failed* * - determines whether you are going to count the successful or failed Windows load distributions
 >		*since* - gives totals counted between the present and a given date* (required if using since) in mm/dd/yyyy format 
 >		*between* - gives totals counted between two given dates* (beginning and end required if using between) in mm/dd/yyyy format with the start date first
 >		*on* - gives totals counted on a given date* (required if using on)
