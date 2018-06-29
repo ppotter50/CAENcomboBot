@@ -17,7 +17,7 @@ for ($n=0; $n -lt $listob.channels.id.Length; $n++) {
 	Add-Content -Path .\variables\channelvar.ps1 -Value "`$$($listob.channels.name[$n]) = '$($listob.channels.id[$n])'"
 }
 
-Get-Content .\variables\channelvar.ps1 | foreach {$_ -replace '-',''} | Out-File .\variables\channelvar-fixed.ps1
+Get-Content .\variables\channelvar.ps1 | ForEach-Object {$_ -replace '-',''} | Out-File .\variables\channelvar-fixed.ps1
 
 #generate file with user variables from API request then remove '-' from variable names
 Clear-Content ".\variables\uservar.ps1",".\variables\uservar-fixed.ps1"
@@ -29,7 +29,7 @@ for ($n=0; $n -lt $userob.members.id.Length; $n++) {
 	Add-Content -Path .\variables\uservar.ps1 -Value "`$$($userob.members.name[$n]) = '$($userob.members.id[$n])'"
 }
 
-Get-Content .\variables\uservar.ps1 | foreach {$_ -replace '-',''} | Out-File .\variables\uservar-fixed.ps1
+Get-Content .\variables\uservar.ps1 | ForEach-Object {$_ -replace '-',''} | Out-File .\variables\uservar-fixed.ps1
 
 #load variables from generated files
 . .\variables\channelvar-fixed.ps1
@@ -112,7 +112,7 @@ while ($infinite) {
 					#first ensure a date was entered then ensure the proper amount of dates are present
 					if ($mesob.messages.text -match "(\d\d|\d)(\/|-)(\d\d|\d)(\/|-)(\d\d\d\d|\d\d)") {
 					
-						$SplitMatches = Select-String "(\d\d|\d)(\/|-)(\d\d|\d)(\/|-)(\d\d\d\d|\d\d)" -input $mesob.messages.text -AllMatches | foreach{$_.matches.value}
+						$SplitMatches = Select-String "(\d\d|\d)(\/|-)(\d\d|\d)(\/|-)(\d\d\d\d|\d\d)" -input $mesob.messages.text -AllMatches | ForEach-Object{$_.matches.value}
 						
 						if (@($SplitMatches).Length -ne 1) {
 						
@@ -156,7 +156,7 @@ while ($infinite) {
 					#first ensure a date was entered then ensure the proper amount of dates are present
 					if ($mesob.messages.text -match "(\d\d|\d)(\/|-)(\d\d|\d)(\/|-)(\d\d\d\d|\d\d)") {
 						
-						$SplitMatches = Select-String "(\d\d|\d)(\/|-)(\d\d|\d)(\/|-)(\d\d\d\d|\d\d)" -input $mesob.messages.text -AllMatches | foreach{$_.matches.value}
+						$SplitMatches = Select-String "(\d\d|\d)(\/|-)(\d\d|\d)(\/|-)(\d\d\d\d|\d\d)" -input $mesob.messages.text -AllMatches | ForEach-Object{$_.matches.value}
 						
 						if (@($SplitMatches).Length -ne 2) {
 						
@@ -201,7 +201,7 @@ while ($infinite) {
 					#first ensure a date was entered then ensure the proper amount of dates are present
 					if ($mesob.messages.text -match "(\d\d|\d)(\/|-)(\d\d|\d)(\/|-)(\d\d\d\d|\d\d)") {
 						
-						$SplitMatches = Select-String "(\d\d|\d)(\/|-)(\d\d|\d)(\/|-)(\d\d\d\d|\d\d)" -input $mesob.messages.text -AllMatches | foreach{$_.matches.value}
+						$SplitMatches = Select-String "(\d\d|\d)(\/|-)(\d\d|\d)(\/|-)(\d\d\d\d|\d\d)" -input $mesob.messages.text -AllMatches | ForEach-Object{$_.matches.value}
 						
 						if (@($SplitMatches).Length -ne 1) {
 						
