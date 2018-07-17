@@ -83,6 +83,23 @@ function howmanyCount {
 	$count
 }
 
+function loadList {
+	#initialize array
+	$loads = @()
+
+	for ($n=0;$n -le $histob.length;$n++){
+		if ($histob.attachments.color[$n] -eq $green) {
+
+			$fullText = $histob.attachments.text[$n].Split(' ')
+			$simpleText = $fullText[0]
+			$loads += $simpleText
+
+		}
+	}
+	$loadsout = $loads -join '\n'
+	$loadsout
+}
+
 while ($infinite) {
 
 	#get message from windows-logs channel
@@ -288,7 +305,7 @@ while ($infinite) {
 
 						$count++
 
-						$messyname = $histob.messages.attachments.text.Split(' ')
+						$messyname = $histob.messages.attachments.text[$n].Split(' ')
 						$name = $messyname[0]
 						$active += $name
 					}
@@ -298,6 +315,111 @@ while ($infinite) {
 				$encodedActive = [System.Web.HttpUtility]::UrlEncode("There are currently $count active loads. The hostnames of these loads are as follows")
 				Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$windowslogs&text=$encodedActive&attachments[{`"color`":`"000000`",`"text`":`"$nameString`"}]"
 
+			}
+
+			elseif ($mesob.messages.text.Contains("what was loaded")) {
+
+				if ($mesob.messages.text.Contains("since")) {
+					#first ensure a date was entered then ensure the proper amount of dates are present
+					if ($mesob.messages.text -match "(\d\d|\d)(\/|-)(\d\d|\d)(\/|-)(\d\d\d\d|\d\d)") {
+
+						$SplitMatches = Select-String "(\d\d|\d)(\/|-)(\d\d|\d)(\/|-)(\d\d\d\d|\d\d)" -input $mesob.messages.text -AllMatches | ForEach-Object{$_.matches.value}
+
+						if (@($SplitMatches).Length -ne 1) {
+
+							$wrongQuan = [System.Web.HttpUtility]::UrlEncode("The wrong number of dates has been entered`nFor the 'how many since' command one date is required`nFor help text say 'help'")
+
+							Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$windowslogs&text=$wrongQuan" -Method "POST"
+							done
+
+						}
+
+						#convert date to unix time
+						$date = Get-Date @($SplitMatches)[0] -UFormat %s
+
+						#pull channel history from Slack channel 'windows-logs'
+						$hist = Invoke-WebRequest "https://slack.com/api/channels.history?token=$token&channel=$windowslogs&count=1000&oldest=$date&inclusive=true" -Method "GET"
+						$histob = $hist.Content | ConvertFrom-Json
+
+						$loadlist = loadList
+
+						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers have been successfully loaded since $(@($SplitMatches)[0])")
+						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$windowslogs&text=$loadencode&attachments=[{`'color`':`'$purple`',`'text`':`'$loadlist`'}]" -Method 'POST'
+
+					}
+				}
+
+				elseif ($mesob.messages.text.Contains("between")) {
+					#first ensure a date was entered then ensure the proper amount of dates are present
+					if ($mesob.messages.text -match "(\d\d|\d)(\/|-)(\d\d|\d)(\/|-)(\d\d\d\d|\d\d)") {
+
+						$SplitMatches = Select-String "(\d\d|\d)(\/|-)(\d\d|\d)(\/|-)(\d\d\d\d|\d\d)" -input $mesob.messages.text -AllMatches | ForEach-Object{$_.matches.value}
+
+						if (@($SplitMatches).Length -ne 2) {
+
+							$wrongQuan = [System.Web.HttpUtility]::UrlEncode("The wrong number of dates has been entered`nFor the 'how many between' command two dates are required`nFor help text say 'help'")
+
+							Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$windowslogs&text=$wrongQuan" -Method "POST"
+							done
+
+						}
+
+						#convert dates to unix time
+						$startdate = Get-Date @($SplitMatches)[0] -UFormat %s
+						$enddate = Get-Date "$(@($SplitMatches)[1]) 23:59" -UFormat %s
+
+						#pull channel history from Slack channel 'windows-logs'
+						$hist = Invoke-WebRequest "https://slack.com/api/channels.history?token=$token&channel=$windowslogs&count=1000&oldest=$startdate&latest=$enddate&inclusive=true" -Method "GET"
+						$histob = $hist.Content | ConvertFrom-Json
+
+						$loadlist = loadList
+
+						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were successfully loaded between $(@($SplitMatches)[0]) and $(@($SplitMatches)[1])")
+						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$windowslogs&text=$loadencode&attachments=[{`'color`':`'$purple`',`'text`':`'$loadlist`'}]" -Method 'POST'
+					}
+				}
+
+				elseif ($mesob.messages.text.Contains("on")) {
+					#first ensure a date was entered then ensure the proper amount of dates are present
+					if ($mesob.messages.text -match "(\d\d|\d)(\/|-)(\d\d|\d)(\/|-)(\d\d\d\d|\d\d)") {
+
+						$SplitMatches = Select-String "(\d\d|\d)(\/|-)(\d\d|\d)(\/|-)(\d\d\d\d|\d\d)" -input $mesob.messages.text -AllMatches | ForEach-Object{$_.matches.value}
+
+						if (@($SplitMatches).Length -ne 1) {
+
+							$wrongQuan = [System.Web.HttpUtility]::UrlEncode("The wrong number of dates has been entered`nFor the 'how many on' command one date is required`nFor help text say 'help'")
+
+							Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$windowslogs&text=$wrongQuan" -Method "POST"
+							done
+
+						}
+
+						#convert dates to unix time (need to be start and end of day)
+						$startdate = Get-Date @($SplitMatches)[0] -UFormat %s
+						$enddate = Get-Date "$(@($SplitMatches)[0]) 23:59" -UFormat %s
+
+						#pull channel history from Slack channel 'windows-logs'
+						$hist = Invoke-WebRequest "https://slack.com/api/channels.history?token=$token&channel=$windowslogs&count=1000&oldest=$startdate&latest=$enddate&inclusive=true" -Method "GET"
+						$histob = $hist.Content | ConvertFrom-Json
+
+						$loadlist = loadList
+
+						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were successfully loaded on $(@($SplitMatches)[0])")
+						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$windowslogs&text=$loadencode&attachments=[{`'color`':`'$purple`',`'text`':`'$loadlist`'}]" -Method 'POST'
+					}
+				}
+
+				else {
+					$date = Get-Date -UFormat %s
+
+					$hist = Invoke-WebRequest "https://slack.com/api/channels.history?token=$token&channel=$windowslogs&count=1000&oldest=$date&latest=$date&inclusive=true" -Method "GET"
+					$histob = $hist.Content | ConvertFrom-Json
+
+					$loadlist = loadList
+
+					$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were successfully loaded today")
+					Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$windowslogs&text=$loadencode&attachments=[{`'color`':`'$purple`',`'text`':`'$loadlist`'}]" -Method 'POST'
+				}
 			}
 		}
 	}
