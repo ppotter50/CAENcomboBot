@@ -421,6 +421,13 @@ while ($infinite) {
 					Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$windowslogs&text=$loadencode&attachments=[{`'color`':`'$purple`',`'text`':`'$loadlist`'}]" -Method 'POST'
 				}
 			}
+
+			else {
+
+				$nocommand = [System.Web.HttpUtility]::UrlEncode("No known command was entered.`nFor help test enter the command 'help'`nTo request that the command you tried be added email pauljp@umich.edu and I will do my best")
+				Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$windowslogs&text=$nocommand" -Method 'POST'
+
+			}
 		}
 	}
 
