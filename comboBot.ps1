@@ -404,7 +404,7 @@ while ($infinite) {
 
 						$loadlist = loadList
 						$histob.messages.attachments.text[0].Split(' ') | Out-File -FilePath 'c:\Users\Paul Potter\Downloads\DeleteThis\botlog.txt' #for testing and debugging
-						$fullText | Out-File -FilePath 'c:\Users\Paul Potter\Downloads\DeleteThis\botlog2.txt'
+						$histob.messages.attachments.color[0..10] | Out-File -FilePath 'c:\Users\Paul Potter\Downloads\DeleteThis\botlog2.txt'
 
 						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were successfully loaded on $(@($SplitMatches)[0])")
 						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`'color`':`'$purple`',`'text`':`'$loadlist`'}]" -Method 'POST'
