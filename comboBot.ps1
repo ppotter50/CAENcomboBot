@@ -280,7 +280,7 @@ while ($infinite) {
 
 				#initialize counter and array
 				$count = 0
-				$active = @()
+				$active = New-Object System.Collections.ArrayList
 
 				#get the date from two days ago
 				$predate = (Get-Date).AddDays(-2)
@@ -306,7 +306,7 @@ while ($infinite) {
 
 						$messyname = $histob.messages.attachments.text[$n].Split(' ')
 						$name = $messyname[0]
-						$active += $name
+						[void]$active.Add($name)
 					}
 				}
 
