@@ -93,6 +93,7 @@ function loadList {
 			$loads += $simpleText
 		}
 	}
+	$loads | Write-Host
 	$loadsout = $loads -join "\n"
 	$loadsout | Write-Host
 	$loadsout
