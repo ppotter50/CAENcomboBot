@@ -93,7 +93,7 @@ function loadList {
 			$loads += $simpleText
 		}
 	}
-	$loadsout = $loads -join "\n"
+	$loadsout = $loads -join '\n'
 	$loadsout
 }
 
@@ -344,7 +344,7 @@ while ($infinite) {
 						$loadlist = loadList
 
 						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers have been successfully loaded since $(@($SplitMatches)[0])")
-						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`'color`':`'$purple`',`'text`':`'$loadlist`'}]" -Method 'POST'
+						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`"color`":`"$purple`",`"text`":`"$loadlist`"}]" -Method 'POST'
 
 					}
 				}
@@ -375,7 +375,7 @@ while ($infinite) {
 						$loadlist = loadList
 
 						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were successfully loaded between $(@($SplitMatches)[0]) and $(@($SplitMatches)[1])")
-						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`'color`':`'$purple`',`'text`':`'$loadlist`'}]" -Method 'POST'
+						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`"color`":`"$purple`",`"text`":`"$loadlist`"}]" -Method 'POST'
 					}
 				}
 
@@ -404,7 +404,7 @@ while ($infinite) {
 
 						$loadlist = loadList
 						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were successfully loaded on $(@($SplitMatches)[0])")
-						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`'color`':`'$purple`',`'text`':`'$loadlist`'}]" -Method 'POST'
+						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`"color`":`"$purple`",`"text`":`"$loadlist`"}]" -Method 'POST'
 					}
 				}
 
@@ -417,7 +417,7 @@ while ($infinite) {
 					$loadlist = loadList
 
 					$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were successfully loaded today")
-					Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`'color`':`'$purple`',`'text`':`'$loadlist`'}]" -Method 'POST'
+					Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`"color`":`"$purple`",`"text`":`"$loadlist`"}]" -Method 'POST'
 				}
 			}
 
