@@ -84,7 +84,7 @@ function howmanyCount {
 	$count
 }
 
-function loadList($histob) {
+function loadList {
 	for ($n=0;$n -le $histob.length;$n++){
 		if ($histob.messages.attachments.color[$n] -eq $green) {
 
@@ -341,7 +341,7 @@ while ($infinite) {
 						$hist = Invoke-WebRequest "https://slack.com/api/channels.history?token=$token&channel=$windowslogs&count=1000&oldest=$date&inclusive=true" -Method "GET"
 						$histob = $hist.Content | ConvertFrom-Json
 
-						$loadlist = loadList($histob)
+						$loadlist = loadList
 
 						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers have been successfully loaded since $(@($SplitMatches)[0])")
 						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`'color`':`'$purple`',`'text`':`'$loadlist`'}]" -Method 'POST'
@@ -372,7 +372,7 @@ while ($infinite) {
 						$hist = Invoke-WebRequest "https://slack.com/api/channels.history?token=$token&channel=$windowslogs&count=1000&oldest=$startdate&latest=$enddate&inclusive=true" -Method "GET"
 						$histob = $hist.Content | ConvertFrom-Json
 
-						$loadlist = loadList($histob)
+						$loadlist = loadList
 
 						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were successfully loaded between $(@($SplitMatches)[0]) and $(@($SplitMatches)[1])")
 						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`'color`':`'$purple`',`'text`':`'$loadlist`'}]" -Method 'POST'
@@ -402,8 +402,9 @@ while ($infinite) {
 						$hist = Invoke-WebRequest "https://slack.com/api/channels.history?token=$token&channel=$windowslogs&count=1000&oldest=$startdate&latest=$enddate&inclusive=true" -Method "GET"
 						$histob = $hist.Content | ConvertFrom-Json
 
-						$loadlist = loadList($histob)
-						$loads | Out-File -FilePath 'c:\Users\Paul Potter\Downloads\DeleteThis\botlog.txt' #for testing and debugging
+						$loadlist = loadList
+						$histob.messages.attachments.text | Out-File -FilePath 'c:\Users\Paul Potter\Downloads\DeleteThis\botlog.txt' #for testing and debugging
+						$fullText | Out-File -FilePath 'c:\Users\Paul Potter\Downloads\DeleteThis\botlog2.txt'
 
 						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were successfully loaded on $(@($SplitMatches)[0])")
 						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`'color`':`'$purple`',`'text`':`'$loadlist`'}]" -Method 'POST'
@@ -416,7 +417,7 @@ while ($infinite) {
 					$hist = Invoke-WebRequest "https://slack.com/api/channels.history?token=$token&channel=$windowslogs&count=1000&oldest=$date&latest=$date&inclusive=true" -Method "GET"
 					$histob = $hist.Content | ConvertFrom-Json
 
-					$loadlist = loadList($histob)
+					$loadlist = loadList
 
 					$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were successfully loaded today")
 					Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`'color`':`'$purple`',`'text`':`'$loadlist`'}]" -Method 'POST'
