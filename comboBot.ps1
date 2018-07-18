@@ -90,7 +90,7 @@ function loadList {
 
 			$fullText = $histob.messages.attachments.text[$eye].Split(' ')
 			$simpleText = $fullText[0]
-			$loads.Add($simpleText)
+			[void]$loads.Add($simpleText)
 		}
 	}
 	$loads[2] | Write-Host
