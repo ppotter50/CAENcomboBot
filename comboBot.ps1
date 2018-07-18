@@ -85,6 +85,8 @@ function howmanyCount {
 }
 
 function loadList {
+	$tuck = "ahhhhhh"
+	$tuck | Out-File 'C:\Users\Paul Potter\Downloads\DeleteThis\entersfunc.txt'
 	for ($n=0;$n -le $histob.length;$n++){
 		if ($histob.messages.attachments.color[$n] -eq $green) {
 
