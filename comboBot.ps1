@@ -94,6 +94,7 @@ function loadList {
 		}
 	}
 	$loadsout = $loads -join "\n"
+	$loadsout | Write-Host
 	$loadsout
 }
 
