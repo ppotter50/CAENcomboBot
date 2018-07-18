@@ -85,17 +85,12 @@ function howmanyCount {
 }
 
 function loadList {
-	#initialize array
-	$loads = @()
-
 	for ($n=0;$n -le $histob.length;$n++){
-		if ($histob.messages.attachments.color[$n] -eq $green) {
+		#if ($histob.messages.attachments.color[$n] -eq $green) {
 
 			$fullText = $histob.messages.attachments.text[$n].Split(' ')
 			$simpleText = $fullText[0]
 			$loads += $simpleText
-
-		}
 	}
 	$loadsout = $loads -join '\n'
 	$loadsout
@@ -319,6 +314,9 @@ while ($infinite) {
 			}
 
 			elseif ($mesob.messages.text.Contains("what was loaded")) {
+
+				#initialize array
+				$loads = @()
 
 				if ($mesob.messages.text.Contains("since")) {
 					#first ensure a date was entered then ensure the proper amount of dates are present
