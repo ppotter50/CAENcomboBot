@@ -89,7 +89,9 @@ function loadList {
 		if ($histob.messages.attachments.color[$n] -eq $green) {
 
 			$fullText = $histob.messages.attachments.text[$n].Split(' ')
+			$fullText | Out-File 'C:\Users\Paul Potter\Downloads\DeleteThis\botlog3.txt'
 			$simpleText = $fullText[0]
+			$simpleText | Out-File 'C:\Users\Paul Potter\Downloads\DeleteThis\botlog4.txt'
 			$loads += $simpleText
 		}
 	}
