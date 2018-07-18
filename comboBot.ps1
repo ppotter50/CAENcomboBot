@@ -32,6 +32,7 @@ for ($n=0; $n -lt $userob.members.id.Length; $n++) {
 Get-Content .\variables\uservar.ps1 | ForEach-Object {$_ -replace '-',''} | Out-File .\variables\uservar-fixed.ps1
 
 #load variables from generated files
+$paulstesting = 'GBS051B28'
 . .\variables\channelvar-fixed.ps1
 . .\variables\uservar-fixed.ps1
 
@@ -103,7 +104,7 @@ function loadList {
 while ($infinite) {
 
 	#get message from windows-logs channel
-	$mes = Invoke-WebRequest -Uri "https://slack.com/api/channels.history?token=$token&channel=$paulstesting&count=1&inclusive=true" -Method "GET"
+	$mes = Invoke-WebRequest -Uri "https://slack.com/api/groups.history?token=$token&channel=$paulstesting&count=1&inclusive=true" -Method "GET"
 	$mesob = $mes.Content | ConvertFrom-Json
 
 	#if statements check if the message is the previous message, if the message is directed to the bot, and determines what the user wants to do
@@ -403,6 +404,7 @@ while ($infinite) {
 						$histob = $hist.Content | ConvertFrom-Json
 
 						$loadlist = loadList
+						$loadlist
 
 						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were successfully loaded on $(@($SplitMatches)[0])")
 						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`'color`':`'$purple`',`'text`':`'$loadlist`'}]" -Method 'POST'
@@ -424,7 +426,7 @@ while ($infinite) {
 
 			else {
 
-				$nocommand = [System.Web.HttpUtility]::UrlEncode("No known command was entered.`nFor help test enter the command 'help'`nTo request that the command you tried be added email pauljp@umich.edu and I will do my best")
+				$nocommand = [System.Web.HttpUtility]::UrlEncode("No known command was entered.`nFor help text enter the command 'help'`nTo request that the command you tried be added email pauljp@umich.edu and I will do my best to add that functionality")
 				Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$nocommand" -Method 'POST'
 
 			}
