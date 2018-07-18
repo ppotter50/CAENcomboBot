@@ -32,7 +32,7 @@ for ($n=0; $n -lt $userob.members.id.Length; $n++) {
 Get-Content .\variables\uservar.ps1 | ForEach-Object {$_ -replace '-',''} | Out-File .\variables\uservar-fixed.ps1
 
 #load variables from generated files
-$paulstesting = 'GBS051B28'
+$paulstesting = 'GBS051B28' #for testing
 . .\variables\channelvar-fixed.ps1
 . .\variables\uservar-fixed.ps1
 
@@ -89,9 +89,9 @@ function loadList {
 	$loads = @()
 
 	for ($n=0;$n -le $histob.length;$n++){
-		if ($histob.attachments.color[$n] -eq $green) {
+		if ($histob.messages.attachments.color[$n] -eq $green) {
 
-			$fullText = $histob.attachments.text[$n].Split(' ')
+			$fullText = $histob.messages.attachments.text[$n].Split(' ')
 			$simpleText = $fullText[0]
 			$loads += $simpleText
 
@@ -404,7 +404,7 @@ while ($infinite) {
 						$histob = $hist.Content | ConvertFrom-Json
 
 						$loadlist = loadList
-						$histob | Out-File -FilePath 'c:\Users\Paul Potter\Downloads\DeleteThis\botlog.txt'
+						$histob.messages.attachments.text | Out-File -FilePath 'c:\Users\Paul Potter\Downloads\DeleteThis\botlog.txt' #for testing and debugging
 
 						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were successfully loaded on $(@($SplitMatches)[0])")
 						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`'color`':`'$purple`',`'text`':`'$loadlist`'}]" -Method 'POST'
