@@ -90,7 +90,7 @@ function loadList {
 
 			$fullText = $histob.messages.attachments.text[$eye].Split(' ')
 			$simpleText = $fullText[0]
-			$loads += $simpleText
+			$loads.Add($simpleText)
 		}
 	}
 	$loads[2] | Write-Host
@@ -319,7 +319,7 @@ while ($infinite) {
 			elseif ($mesob.messages.text.Contains("what was loaded")) {
 
 				#initialize array
-				$loads = @()
+				$loads = New-Object System.Collections.ArrayList
 
 				if ($mesob.messages.text.Contains("since")) {
 					#first ensure a date was entered then ensure the proper amount of dates are present
