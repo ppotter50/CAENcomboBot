@@ -93,7 +93,7 @@ function loadList {
 			$loads += $simpleText
 		}
 	}
-	$loadsout = $loads -join '0x0A'
+	$loadsout = $loads -join (0x0A -as [char])
 	$loadsout
 }
 
