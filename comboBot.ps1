@@ -93,7 +93,7 @@ function loadList {
 			$loads += $simpleText
 		}
 	}
-	$loadsout = $loads -join '\n'
+	$loadsout = $loads -join '"\n"'
 	$loadsout
 }
 
