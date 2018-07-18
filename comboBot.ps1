@@ -85,21 +85,15 @@ function howmanyCount {
 }
 
 function loadList {
-	$tuck = "ahhhhhh"
-	$tuck | Out-File 'C:\Users\Paul Potter\Downloads\DeleteThis\entersfunc.txt'
 	for ($eye=0;$eye -le $histob.messages.attachments.color.Length;$eye++){
-		$tuck = "ahhhhhh"
-		$tuck | Out-File 'C:\Users\Paul Potter\Downloads\DeleteThis\entersfor.txt'
 		if ($histob.messages.attachments.color[$eye] -eq $green) {
 
 			$fullText = $histob.messages.attachments.text[$eye].Split(' ')
-			$fullText | Out-File 'C:\Users\Paul Potter\Downloads\DeleteThis\botlog3.txt'
 			$simpleText = $fullText[0]
-			$simpleText | Out-File 'C:\Users\Paul Potter\Downloads\DeleteThis\botlog4.txt'
 			$loads += $simpleText
 		}
 	}
-	$loadsout = $loads -join '\n'
+	$loadsout = $loads -join "`n"
 	$loadsout
 }
 
@@ -409,9 +403,6 @@ while ($infinite) {
 						$histob = $hist.Content | ConvertFrom-Json
 
 						$loadlist = loadList
-						$histob.messages.attachments.text[0].Split(' ') | Out-File -FilePath 'c:\Users\Paul Potter\Downloads\DeleteThis\botlog.txt' #for testing and debugging
-						$histob.messages.attachments.color[0..10] | Out-File -FilePath 'c:\Users\Paul Potter\Downloads\DeleteThis\botlog2.txt'
-
 						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were successfully loaded on $(@($SplitMatches)[0])")
 						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`'color`':`'$purple`',`'text`':`'$loadlist`'}]" -Method 'POST'
 					}
