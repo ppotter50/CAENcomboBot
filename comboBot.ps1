@@ -85,12 +85,12 @@ function howmanyCount {
 }
 
 function loadList {
-	for ($n=0;$n -le $histob.length;$n++){
+	for ($eye=0;$eye -le $histob.length;$eye++){
 		$tuck = "ahhhhhh"
 		$tuck | Out-File 'C:\Users\Paul Potter\Downloads\DeleteThis\entersfor.txt'
-		if ($histob.messages.attachments.color[$n] -eq $green) {
+		if ($histob.messages.attachments.color[$eye] -eq $green) {
 
-			$fullText = $histob.messages.attachments.text[$n].Split(' ')
+			$fullText = $histob.messages.attachments.text[$eye].Split(' ')
 			$fullText | Out-File 'C:\Users\Paul Potter\Downloads\DeleteThis\botlog3.txt'
 			$simpleText = $fullText[0]
 			$simpleText | Out-File 'C:\Users\Paul Potter\Downloads\DeleteThis\botlog4.txt'
