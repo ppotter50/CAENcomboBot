@@ -404,7 +404,7 @@ while ($infinite) {
 						$histob = $hist.Content | ConvertFrom-Json
 
 						$loadlist = loadList
-						$hist | Out-File -FilePath 'c:\Users\Paul Potter\Downloads\DeleteThis\botlog.txt'
+						$histob.attachments.text | Out-File -FilePath 'c:\Users\Paul Potter\Downloads\DeleteThis\botlog.txt'
 
 						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were successfully loaded on $(@($SplitMatches)[0])")
 						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`'color`':`'$purple`',`'text`':`'$loadlist`'}]" -Method 'POST'
