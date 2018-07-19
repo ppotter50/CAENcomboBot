@@ -282,6 +282,7 @@ while ($infinite) {
 				else {
 					if ($mesob.messages.text -match "(\d\d|\d)(\/|-)(\d\d|\d)(\/|-)(\d\d\d\d|\d\d)") {
 						$hasdateencode = [System.Web.HttpUtility]::UrlEncode("It appears you have included a date but no sub command, if you would like to specify a date please include a sub command.`nFor help text say 'help'")
+						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulsteting&text=$hasdateencode" -Method "POST"
 					}
 					else {
 						$startdate = Get-Date -Hour 00 -Minute 00 -UFormat %s
@@ -472,6 +473,7 @@ while ($infinite) {
 				else {
 					if ($mesob.messages.text -match "(\d\d|\d)(\/|-)(\d\d|\d)(\/|-)(\d\d\d\d|\d\d)") {
 						$hasdateencode = [System.Web.HttpUtility]::UrlEncode("It appears you have included a date but no sub command, if you would like to specify a date please include a sub command.`nFor help text say 'help'")
+						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulsteting&text=$hasdateencode" -Method "POST"
 					}
 					else {
 						$startdate = Get-Date -Hour 00 -Minute 00 -UFormat %s
