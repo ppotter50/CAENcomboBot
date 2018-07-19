@@ -161,7 +161,7 @@ while ($infinite) {
 						}
 
 						#convert date to unix time
-						$date = Get-Date "$(@($SplitMatches)[0]) 00:00" -UFormat %s
+						$date = Get-Date "$(@($SplitMatches)[0]) 00:01" -UFormat %s
 
 						#pull channel history from Slack channel 'windows-logs'
 						$hist = Invoke-WebRequest "https://slack.com/api/channels.history?token=$token&channel=$windowslogs&count=1000&oldest=$date&inclusive=true" -Method "GET"
@@ -205,7 +205,7 @@ while ($infinite) {
 						}
 
 						#convert dates to unix time
-						$startdate = Get-Date "$(@($SplitMatches)[0]) 00:00" -UFormat %s
+						$startdate = Get-Date "$(@($SplitMatches)[0]) 00:01" -UFormat %s
 						$enddate = Get-Date "$(@($SplitMatches)[1]) 23:59" -UFormat %s
 
 						#pull channel history from Slack channel 'windows-logs'
@@ -250,7 +250,7 @@ while ($infinite) {
 						}
 
 						#convert dates to unix time (need to be start and end of day)
-						$startdate = Get-Date "$(@($SplitMatches)[0]) 00:00" -UFormat %s
+						$startdate = Get-Date "$(@($SplitMatches)[0]) 00:01" -UFormat %s
 						$enddate = Get-Date "$(@($SplitMatches)[0]) 23:59" -UFormat %s
 
 						#pull channel history from Slack channel 'windows-logs'
@@ -286,7 +286,7 @@ while ($infinite) {
 						done
 					}
 					else {
-						$startdate = Get-Date -Hour 00 -Minute 00 -UFormat %s
+						$startdate = Get-Date -Hour 00 -Minute 01 -UFormat %s
 						$enddate = Get-Date -Hour 23 -Minute 59 -Uformat %s
 
 						$hist = Invoke-WebRequest "https://slack.com/api/channels.history?token=$token&channel=$windowslogs&count=1000&oldest=$enddate&latest=$startdate&inclusive=true" -Method "GET"
@@ -369,7 +369,7 @@ while ($infinite) {
 						}
 
 						#convert date to unix time
-						$date = Get-Date "$(@($SplitMatches)[0]) 00:00" -UFormat %s
+						$date = Get-Date "$(@($SplitMatches)[0]) 00:01" -UFormat %s
 
 						#pull channel history from Slack channel 'windows-logs'
 						$hist = Invoke-WebRequest "https://slack.com/api/channels.history?token=$token&channel=$windowslogs&count=1000&oldest=$date&inclusive=true" -Method "GET"
@@ -409,7 +409,7 @@ while ($infinite) {
 						}
 
 						#convert dates to unix time
-						$startdate = Get-Date "$(@($SplitMatches)[0]) 00:00" -UFormat %s
+						$startdate = Get-Date "$(@($SplitMatches)[0]) 00:01" -UFormat %s
 						$enddate = Get-Date "$(@($SplitMatches)[1]) 23:59" -UFormat %s
 
 						#pull channel history from Slack channel 'windows-logs'
@@ -449,7 +449,7 @@ while ($infinite) {
 						}
 
 						#convert dates to unix time (need to be start and end of day)
-						$startdate = Get-Date "$(@($SplitMatches)[0]) 00:00" -UFormat %s
+						$startdate = Get-Date "$(@($SplitMatches)[0]) 00:01" -UFormat %s
 						$enddate = Get-Date "$(@($SplitMatches)[0]) 23:59" -UFormat %s
 
 						#pull channel history from Slack channel 'windows-logs'
@@ -480,10 +480,10 @@ while ($infinite) {
 						done
 					}
 					else {
-						#$startdate = Get-Date -Hour 00 -Minute 00 -UFormat %s
+						$startdate = Get-Date -Hour 00 -Minute 01 -UFormat %s
 						$enddate = Get-Date -Hour 23 -Minute 59 -UFormat %s
 
-						$hist = Invoke-WebRequest "https://slack.com/api/channels.history?token=$token&channel=$windowslogs&count=1000&oldest=$enddate&inclusive=true" -Method "GET"
+						$hist = Invoke-WebRequest "https://slack.com/api/channels.history?token=$token&channel=$windowslogs&count=1000&oldest=$enddate&latest=$startdate&inclusive=true" -Method "GET"
 						$histob = $hist.Content | ConvertFrom-Json
 
 						$loadlist = loadList
