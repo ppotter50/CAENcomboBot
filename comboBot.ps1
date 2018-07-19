@@ -38,9 +38,9 @@ $paulstesting = 'GBS051B28' #for testing
 
 #function to reset the loop after a message has been output or the loop has completed
 function done {
-$checkDoub = $mesob.messages.text
-Start-Sleep 1
-continue
+	$checkDoub = $mesob.messages.text
+	Start-Sleep 1
+	continue
 }
 
 #function to determine whether counting failed or successful loads
@@ -280,19 +280,24 @@ while ($infinite) {
 
 				#default 'how many' behavior
 				else {
-					$startdate = Get-Date -Hour 00 -Minute 00 -UFormat %s
-					$enddate = Get-Date -Hour 23 -Minute 59 -Uformat %s
+					if ($mesob.messages.text -match "(\d\d|\d)(\/|-)(\d\d|\d)(\/|-)(\d\d\d\d|\d\d)") {
+						$hasdateencode = [System.Web.HttpUtility]::UrlEncode("It appears you have included a date but no sub command, if you would like to specify a date please include a sub command.`nFor help text say 'help'")
+					}
+					else {
+						$startdate = Get-Date -Hour 00 -Minute 00 -UFormat %s
+						$enddate = Get-Date -Hour 23 -Minute 59 -Uformat %s
 
-					$hist = Invoke-WebRequest "https://slack.com/api/channels.history?token=$token&channel=$windowslogs&count=1000&oldest=$enddate&latest=$startdate&inclusive=true" -Method "GET"
-					$histob = $hist.Content | ConvertFrom-Json
+						$hist = Invoke-WebRequest "https://slack.com/api/channels.history?token=$token&channel=$windowslogs&count=1000&oldest=$enddate&latest=$startdate&inclusive=true" -Method "GET"
+						$histob = $hist.Content | ConvertFrom-Json
 
-					$type = setType
+						$type = setType
 
-					$count = howmanyCount
+						$count = howmanyCount
 
-					$countResult = [System.Web.HttpUtility]::UrlEncode("There have been $count $type loads today")
-					Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$countResult" -Method "POST"
-					done
+						$countResult = [System.Web.HttpUtility]::UrlEncode("There have been $count $type loads today")
+						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$countResult" -Method "POST"
+						done
+					}
 				}
 
 
@@ -335,6 +340,7 @@ while ($infinite) {
 				$nameString = $active -join '\n'
 				$encodedActive = [System.Web.HttpUtility]::UrlEncode("There are currently $count active loads. The hostnames of these loads are as follows")
 				Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$encodedActive&attachments[{`"color`":`"000000`",`"text`":`"$nameString`"}]"
+				done
 
 			}
 
@@ -369,6 +375,7 @@ while ($infinite) {
 
 						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers have been$loadtype loaded since $(@($SplitMatches)[0])")
 						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`"color`":`"$purple`",`"text`":`"$loadlist`"}]" -Method 'POST'
+						done
 
 					}
 
@@ -409,6 +416,7 @@ while ($infinite) {
 
 						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were$loadtype loaded between $(@($SplitMatches)[0]) and $(@($SplitMatches)[1])")
 						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`"color`":`"$purple`",`"text`":`"$loadlist`"}]" -Method 'POST'
+						done
 					}
 
 					elseif ($mesob.messages.text -NotMatch "(\d\d|\d)(\/|-)(\d\d|\d)(\/|-)(\d\d\d\d|\d\d)") {
@@ -448,6 +456,7 @@ while ($infinite) {
 
 						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were$loadtype loaded on $(@($SplitMatches)[0])")
 						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`"color`":`"$purple`",`"text`":`"$loadlist`"}]" -Method 'POST'
+						done
 					}
 
 					elseif ($mesob.messages.text -NotMatch "(\d\d|\d)(\/|-)(\d\d|\d)(\/|-)(\d\d\d\d|\d\d)") {
@@ -461,24 +470,29 @@ while ($infinite) {
 				}
 
 				else {
-					$startdate = Get-Date -Hour 00 -Minute 00 -UFormat %s
-					$enddate = Get-Date -Hour 23 -Minute 59 -UFormat %s
+					if ($mesob.messages.text -match "(\d\d|\d)(\/|-)(\d\d|\d)(\/|-)(\d\d\d\d|\d\d)") {
+						$hasdateencode = [System.Web.HttpUtility]::UrlEncode("It appears you have included a date but no sub command, if you would like to specify a date please include a sub command.`nFor help text say 'help'")
+					}
+					else {
+						$startdate = Get-Date -Hour 00 -Minute 00 -UFormat %s
+						$enddate = Get-Date -Hour 23 -Minute 59 -UFormat %s
 
-					$hist = Invoke-WebRequest "https://slack.com/api/channels.history?token=$token&channel=$windowslogs&count=1000&oldest=$enddate&latest=$startdate&inclusive=true" -Method "GET"
-					$histob = $hist.Content | ConvertFrom-Json
+						$hist = Invoke-WebRequest "https://slack.com/api/channels.history?token=$token&channel=$windowslogs&count=1000&oldest=$enddate&latest=$startdate&inclusive=true" -Method "GET"
+						$histob = $hist.Content | ConvertFrom-Json
 
-					$loadlist = loadList
+						$loadlist = loadList
 
-					$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were$loadtype loaded today")
-					Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`"color`":`"$purple`",`"text`":`"$loadlist`"}]" -Method 'POST'
+						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were$loadtype loaded today")
+						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`"color`":`"$purple`",`"text`":`"$loadlist`"}]" -Method 'POST'
+						done
+					}
 				}
 			}
 
 			else {
-
 				$nocommand = [System.Web.HttpUtility]::UrlEncode("No known command was entered.`nFor help text enter the command 'help'`nTo request that the command you tried be added email pauljp@umich.edu and I will do my best to add that functionality")
 				Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$nocommand" -Method 'POST'
-
+				done
 			}
 		}
 	}
