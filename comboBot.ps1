@@ -86,6 +86,7 @@ function howmanyCount {
 
 function loadList {
 	if ($mesob.messages.text.Contains("failed")) {
+		$loadtype = " unsuccessfully"
 		for ($eye=0;$eye -le $histob.messages.attachments.color.Length;$eye++){
 			if ($histob.messages.attachments.color[$eye] -eq $red) {
 				$fullText = $histob.messages.attachments.text[$eye].Split(' ')
@@ -95,6 +96,7 @@ function loadList {
 		}
 	}
 	elseif ($mesob.messages.text.Contains("all")) {
+		$loadtype = ""
 		for ($eye=0;$eye -le $histob.messages.attachments.color.Length;$eye++){
 			if ($histob.messages.attachments.color[$eye] -eq $blue) {
 				$fullText = $histob.messages.attachments.text[$eye].Split(' ')
@@ -104,6 +106,7 @@ function loadList {
 		}
 	}
 	else {
+		$loadtype = "successfully"
 		for ($eye=0;$eye -le $histob.messages.attachments.color.Length;$eye++){
 			if ($histob.messages.attachments.color[$eye] -eq $blue) {
 				$fullText = $histob.messages.attachments.text[$eye].Split(' ')
@@ -116,19 +119,6 @@ function loadList {
 	$loadsout
 }
 
-function failedLoadList{
-	for ($i=0;$i -le $histob.messages.attachments.color.Length;$i++){
-		if ($histob.messages.attachments.color[$i] -eq $red) {
-
-			$fullText = $histob.messages.attachments.text[$i].Split(' ')
-			$simpleText = $fullText[0]
-			[void]$loads.Add($simpleText)
-		}
-	}
-	$loadsout = $loads -join "\n"
-	$loadsout
-
-}
 
 while ($infinite) {
 
@@ -377,7 +367,7 @@ while ($infinite) {
 
 						$loadlist = loadList
 
-						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers have been successfully loaded since $(@($SplitMatches)[0])")
+						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers have been$loadtype loaded since $(@($SplitMatches)[0])")
 						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`"color`":`"$purple`",`"text`":`"$loadlist`"}]" -Method 'POST'
 
 					}
@@ -417,7 +407,7 @@ while ($infinite) {
 
 						$loadlist = loadList
 
-						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were successfully loaded between $(@($SplitMatches)[0]) and $(@($SplitMatches)[1])")
+						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were$loadtype loaded between $(@($SplitMatches)[0]) and $(@($SplitMatches)[1])")
 						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`"color`":`"$purple`",`"text`":`"$loadlist`"}]" -Method 'POST'
 					}
 
@@ -456,7 +446,7 @@ while ($infinite) {
 
 						$loadlist = loadList
 
-						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were successfully loaded on $(@($SplitMatches)[0])")
+						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were$loadtype loaded on $(@($SplitMatches)[0])")
 						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`"color`":`"$purple`",`"text`":`"$loadlist`"}]" -Method 'POST'
 					}
 
@@ -479,7 +469,7 @@ while ($infinite) {
 
 					$loadlist = loadList
 
-					$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were successfully loaded today")
+					$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were$loadtype loaded today")
 					Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`"color`":`"$purple`",`"text`":`"$loadlist`"}]" -Method 'POST'
 				}
 			}
