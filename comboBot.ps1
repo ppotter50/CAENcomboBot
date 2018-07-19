@@ -481,7 +481,7 @@ while ($infinite) {
 					}
 					else {
 						$startdate = Get-Date -Hour 00 -Minute 01 -UFormat %s
-						$enddate = Get-Date -UFormat %s
+						$enddate = Get-Date -Hour 23 -Minute 59 -UFormat %s
 
 						$hist = Invoke-WebRequest "https://slack.com/api/channels.history?token=$token&channel=$windowslogs&count=1000&oldest=$startdate&latest=$enddate&inclusive=true" -Method "GET"
 						$histob = $hist.Content | ConvertFrom-Json
