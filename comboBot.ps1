@@ -481,10 +481,11 @@ while ($infinite) {
 					}
 					else {
 						$startdate = Get-Date -Hour 00 -Minute 01 -UFormat %s
-						$enddate = Get-Date -Hour 23 -Minute 59 -UFormat %s
+						$enddate = Get-Date -UFormat %s
 
-						$hist = Invoke-WebRequest "https://slack.com/api/channels.history?token=$token&channel=$windowslogs&count=1000&oldest=$enddate&latest=$startdate&inclusive=true" -Method "GET"
+						$hist = Invoke-WebRequest "https://slack.com/api/channels.history?token=$token&channel=$windowslogs&count=1000&oldest=$startdate&latest=$enddate&inclusive=true" -Method "GET"
 						$histob = $hist.Content | ConvertFrom-Json
+						$histob.messages.attachments.color | Out-File "C:\Users\Paul Potter\Downloads\DeleteThis\testing.txt"
 
 						$loadlist = loadList
 
