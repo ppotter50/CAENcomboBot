@@ -85,18 +85,49 @@ function howmanyCount {
 }
 
 function loadList {
-	for ($eye=0;$eye -le $histob.messages.attachments.color.Length;$eye++){
-		if ($histob.messages.attachments.color[$eye] -eq $green) {
+	if ($mesob.messages.text.Contains("failed")) {
+		for ($eye=0;$eye -le $histob.messages.attachments.color.Length;$eye++){
+			if ($histob.messages.attachments.color[$eye] -eq $red) {
+				$fullText = $histob.messages.attachments.text[$eye].Split(' ')
+				$simpleText = $fullText[0]
+				[void]$loads.Add($simpleText)
+			}
+		}
+	}
+	elseif ($mesob.messages.text.Contains("all")) {
+		for ($eye=0;$eye -le $histob.messages.attachments.color.Length;$eye++){
+			if ($histob.messages.attachments.color[$eye] -eq $blue) {
+				$fullText = $histob.messages.attachments.text[$eye].Split(' ')
+				$simpleText = $fullText[0]
+				[void]$loads.Add($simpleText)
+			}
+		}
+	}
+	else {
+		for ($eye=0;$eye -le $histob.messages.attachments.color.Length;$eye++){
+			if ($histob.messages.attachments.color[$eye] -eq $blue) {
+				$fullText = $histob.messages.attachments.text[$eye].Split(' ')
+				$simpleText = $fullText[0]
+				[void]$loads.Add($simpleText)
+			}
+		}
+	}
+	$loadsout = $loads -join "\n"
+	$loadsout
+}
 
-			$fullText = $histob.messages.attachments.text[$eye].Split(' ')
+function failedLoadList{
+	for ($i=0;$i -le $histob.messages.attachments.color.Length;$i++){
+		if ($histob.messages.attachments.color[$i] -eq $red) {
+
+			$fullText = $histob.messages.attachments.text[$i].Split(' ')
 			$simpleText = $fullText[0]
 			[void]$loads.Add($simpleText)
 		}
 	}
-	$loads[2] | Write-Host
 	$loadsout = $loads -join "\n"
-	$loadsout | Write-Host
 	$loadsout
+
 }
 
 while ($infinite) {
@@ -140,7 +171,7 @@ while ($infinite) {
 						}
 
 						#convert date to unix time
-						$date = Get-Date @($SplitMatches)[0] -UFormat %s
+						$date = Get-Date "@($SplitMatches)[0] 00:00" -UFormat %s
 
 						#pull channel history from Slack channel 'windows-logs'
 						$hist = Invoke-WebRequest "https://slack.com/api/channels.history?token=$token&channel=$windowslogs&count=1000&oldest=$date&inclusive=true" -Method "GET"
@@ -184,7 +215,7 @@ while ($infinite) {
 						}
 
 						#convert dates to unix time
-						$startdate = Get-Date @($SplitMatches)[0] -UFormat %s
+						$startdate = Get-Date "@($SplitMatches)[0] 00:00" -UFormat %s
 						$enddate = Get-Date "$(@($SplitMatches)[1]) 23:59" -UFormat %s
 
 						#pull channel history from Slack channel 'windows-logs'
@@ -229,7 +260,7 @@ while ($infinite) {
 						}
 
 						#convert dates to unix time (need to be start and end of day)
-						$startdate = Get-Date @($SplitMatches)[0] -UFormat %s
+						$startdate = Get-Date "@($SplitMatches)[0] 00:01" -UFormat %s
 						$enddate = Get-Date "$(@($SplitMatches)[0]) 23:59" -UFormat %s
 
 						#pull channel history from Slack channel 'windows-logs'
@@ -259,9 +290,10 @@ while ($infinite) {
 
 				#default 'how many' behavior
 				else {
-					$date = Get-Date -UFormat %s
+					$startdate = Get-Date -Hour 00 -Minute 00 -UFormat %s
+					$enddate = Get-Date -Hour 23 -Minute 59 -Uformat %s
 
-					$hist = Invoke-WebRequest "https://slack.com/api/channels.history?token=$token&channel=$windowslogs&count=1000&oldest=$date&latest=$date&inclusive=true" -Method "GET"
+					$hist = Invoke-WebRequest "https://slack.com/api/channels.history?token=$token&channel=$windowslogs&count=1000&oldest=$enddate&latest=$startdate&inclusive=true" -Method "GET"
 					$histob = $hist.Content | ConvertFrom-Json
 
 					$type = setType
@@ -337,7 +369,7 @@ while ($infinite) {
 						}
 
 						#convert date to unix time
-						$date = Get-Date @($SplitMatches)[0] -UFormat %s
+						$date = Get-Date "@($SplitMatches)[0] 00:00" -UFormat %s
 
 						#pull channel history from Slack channel 'windows-logs'
 						$hist = Invoke-WebRequest "https://slack.com/api/channels.history?token=$token&channel=$windowslogs&count=1000&oldest=$date&inclusive=true" -Method "GET"
@@ -347,6 +379,15 @@ while ($infinite) {
 
 						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers have been successfully loaded since $(@($SplitMatches)[0])")
 						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`"color`":`"$purple`",`"text`":`"$loadlist`"}]" -Method 'POST'
+
+					}
+
+					elseif ($mesob.messages.text -NotMatch "(\d\d|\d)(\/|-)(\d\d|\d)(\/|-)(\d\d\d\d|\d\d)") {
+
+						$badDate = [System.Web.HttpUtility]::UrlEncode("The date entered did not have the proper formatting or there was no date entered, please enter a date in mm/dd/yyyy or mm-dd-yyyy format`nFor help text say 'help'")
+
+						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$badDate" -Method "POST"
+						done
 
 					}
 				}
@@ -367,7 +408,7 @@ while ($infinite) {
 						}
 
 						#convert dates to unix time
-						$startdate = Get-Date @($SplitMatches)[0] -UFormat %s
+						$startdate = Get-Date "@($SplitMatches)[0] 00:00" -UFormat %s
 						$enddate = Get-Date "$(@($SplitMatches)[1]) 23:59" -UFormat %s
 
 						#pull channel history from Slack channel 'windows-logs'
@@ -378,6 +419,15 @@ while ($infinite) {
 
 						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were successfully loaded between $(@($SplitMatches)[0]) and $(@($SplitMatches)[1])")
 						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`"color`":`"$purple`",`"text`":`"$loadlist`"}]" -Method 'POST'
+					}
+
+					elseif ($mesob.messages.text -NotMatch "(\d\d|\d)(\/|-)(\d\d|\d)(\/|-)(\d\d\d\d|\d\d)") {
+
+						$badDate = [System.Web.HttpUtility]::UrlEncode("The date entered did not have the proper formatting or there was no date entered, please enter a date in mm/dd/yyyy or mm-dd-yyyy format`nFor help text say 'help'")
+
+						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$badDate" -Method "POST"
+						done
+
 					}
 				}
 
@@ -397,7 +447,7 @@ while ($infinite) {
 						}
 
 						#convert dates to unix time (need to be start and end of day)
-						$startdate = Get-Date @($SplitMatches)[0] -UFormat %s
+						$startdate = Get-Date "@($SplitMatches)[0] 00:00" -UFormat %s
 						$enddate = Get-Date "$(@($SplitMatches)[0]) 23:59" -UFormat %s
 
 						#pull channel history from Slack channel 'windows-logs'
@@ -405,15 +455,26 @@ while ($infinite) {
 						$histob = $hist.Content | ConvertFrom-Json
 
 						$loadlist = loadList
+
 						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were successfully loaded on $(@($SplitMatches)[0])")
 						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`"color`":`"$purple`",`"text`":`"$loadlist`"}]" -Method 'POST'
+					}
+
+					elseif ($mesob.messages.text -NotMatch "(\d\d|\d)(\/|-)(\d\d|\d)(\/|-)(\d\d\d\d|\d\d)") {
+
+						$badDate = [System.Web.HttpUtility]::UrlEncode("The date entered did not have the proper formatting or there was no date entered, please enter a date in mm/dd/yyyy or mm-dd-yyyy format`nFor help text say 'help'")
+
+						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$badDate" -Method "POST"
+						done
+
 					}
 				}
 
 				else {
-					$date = Get-Date -UFormat %s
+					$startdate = Get-Date -Hour 00 -Minute 00 -UFormat %s
+					$enddate = Get-Date -Hour 23 -Minute 59 -UFormat %s
 
-					$hist = Invoke-WebRequest "https://slack.com/api/channels.history?token=$token&channel=$windowslogs&count=1000&oldest=$date&latest=$date&inclusive=true" -Method "GET"
+					$hist = Invoke-WebRequest "https://slack.com/api/channels.history?token=$token&channel=$windowslogs&count=1000&oldest=$enddate&latest=$startdate&inclusive=true" -Method "GET"
 					$histob = $hist.Content | ConvertFrom-Json
 
 					$loadlist = loadList

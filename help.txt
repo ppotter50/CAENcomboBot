@@ -18,4 +18,15 @@ how many - counts how many successful or failed Windows loads there have been in
 >	Default:
 >		time frame for counted messages is the current date
 
-active - counts the number of unfinshed load installations and displayes the hostname of these loads
+active - counts the number of unfinshed load installations and displayes the hostname of these loads (currently in development, *not currently functional*)
+
+what was loaded - gives a list of all of the computers that have been loaded with a given time frame
+>	Sub-Commands:
+>		*since* - gives the hostnames of computers loaded between the present and a given date* (required if using since) in mm/dd/yyyy format
+>		*between* - gives the hostnames of computers loaded between two given dates* (beginning and end required if using between) in mm/dd/yyyy format with the start date first
+>		*on* - gives the hostnames of computers loaded on a given date* (required if using on)
+>		*failed* - counts failed loads instead of successful loads (successful is the default)
+>		*all* - counts all loads instead of successful loads (successful is the default)
+>		_(Note: Slack API limits requests to 1000 messages, requests spanning long periods of time may give inaccurate counts due to this limitation)_
+>	Default:
+>		time frame for displayed hostnames is the current date and successful loads are displayed
