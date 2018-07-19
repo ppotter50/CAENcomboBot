@@ -106,9 +106,9 @@ function loadList {
 		}
 	}
 	else {
-		$Script:loadtype = "successfully"
+		$Script:loadtype = " successfully"
 		for ($eye=0;$eye -le $histob.messages.attachments.color.Length;$eye++){
-			if ($histob.messages.attachments.color[$eye] -eq $blue) {
+			if ($histob.messages.attachments.color[$eye] -eq $green) {
 				$fullText = $histob.messages.attachments.text[$eye].Split(' ')
 				$simpleText = $fullText[0]
 				[void]$loads.Add($simpleText)
