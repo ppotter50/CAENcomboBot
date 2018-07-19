@@ -138,7 +138,7 @@ while ($infinite) {
 
 			}
 
-			#'how many'
+			#'how many' command
 			elseif ($mesob.messages.text.Contains("how many")){
 
 				#initialize counter
@@ -305,6 +305,7 @@ while ($infinite) {
 
 			}
 
+			#'active' command
 			elseif ($mesob.messages.text.Contains("active")) {
 
 				#initialize counter and array
@@ -346,6 +347,7 @@ while ($infinite) {
 
 			}
 
+			#'what was loaded' command
 			elseif ($mesob.messages.text.Contains("what was loaded")) {
 
 				#initialize array
@@ -478,10 +480,10 @@ while ($infinite) {
 						done
 					}
 					else {
-						$startdate = Get-Date -Hour 00 -Minute 00 -UFormat %s
+						#$startdate = Get-Date -Hour 00 -Minute 00 -UFormat %s
 						$enddate = Get-Date -Hour 23 -Minute 59 -UFormat %s
 
-						$hist = Invoke-WebRequest "https://slack.com/api/channels.history?token=$token&channel=$windowslogs&count=1000&oldest=$enddate&latest=$startdate&inclusive=true" -Method "GET"
+						$hist = Invoke-WebRequest "https://slack.com/api/channels.history?token=$token&channel=$windowslogs&count=1000&oldest=$enddate&inclusive=true" -Method "GET"
 						$histob = $hist.Content | ConvertFrom-Json
 
 						$loadlist = loadList
