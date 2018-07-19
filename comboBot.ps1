@@ -93,7 +93,7 @@ function loadList {
 				$simpleText = $fullText[0]
 				[void]$loads.Add($simpleText)
 				if ($mesob.messages.text.Contains("remove doubles")) {
-					for ($nose=$eye+1;$nose -le $histob.messages.attachments.Length;$nose++) {
+					for ($nose=$eye+1;$nose -le $histob.messages.attachments.color.Length;$nose++) {
 						if ($histob.messages.attachments.text[$nose].Contains($simpleText)) {
 							$histob.messages.attachments.color[$nose] = "000000"
 						}
@@ -110,7 +110,7 @@ function loadList {
 				$simpleText = $fullText[0]
 				[void]$loads.Add($simpleText)
 				if ($mesob.messages.text.Contains("remove doubles")) {
-					for ($nose=$eye+1;$nose -le $histob.messages.attachments.Length;$nose++) {
+					for ($nose=$eye+1;$nose -le $histob.messages.attachments.color.Length;$nose++) {
 						if ($histob.messages.attachments.text[$nose].Contains($simpleText)) {
 							$histob.messages.attachments.color[$nose] = "000000"
 						}
@@ -127,7 +127,7 @@ function loadList {
 				$simpleText = $fullText[0]
 				[void]$loads.Add($simpleText)
 				if ($mesob.messages.text.Contains("remove doubles")) {
-					for ($nose=$eye+1;$nose -le $histob.messages.attachments.Length;$nose++) {
+					for ($nose=$eye+1;$nose -le $histob.messages.attachments.color.Length;$nose++) {
 						if ($histob.messages.attachments.text[$nose].Contains($simpleText)) {
 							$histob.messages.attachments.color[$nose] = "000000"
 						}
