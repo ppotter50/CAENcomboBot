@@ -86,7 +86,7 @@ function howmanyCount {
 
 function loadList {
 	if ($mesob.messages.text.Contains("failed")) {
-		$loadtype = " unsuccessfully"
+		$Script:loadtype = " unsuccessfully"
 		for ($eye=0;$eye -le $histob.messages.attachments.color.Length;$eye++){
 			if ($histob.messages.attachments.color[$eye] -eq $red) {
 				$fullText = $histob.messages.attachments.text[$eye].Split(' ')
@@ -96,7 +96,7 @@ function loadList {
 		}
 	}
 	elseif ($mesob.messages.text.Contains("all")) {
-		$loadtype = ""
+		$Script:loadtype = ""
 		for ($eye=0;$eye -le $histob.messages.attachments.color.Length;$eye++){
 			if ($histob.messages.attachments.color[$eye] -eq $blue) {
 				$fullText = $histob.messages.attachments.text[$eye].Split(' ')
@@ -106,7 +106,7 @@ function loadList {
 		}
 	}
 	else {
-		$loadtype = "successfully"
+		$Script:loadtype = "successfully"
 		for ($eye=0;$eye -le $histob.messages.attachments.color.Length;$eye++){
 			if ($histob.messages.attachments.color[$eye] -eq $blue) {
 				$fullText = $histob.messages.attachments.text[$eye].Split(' ')
