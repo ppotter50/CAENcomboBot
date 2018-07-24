@@ -27,6 +27,7 @@ what was loaded - gives a list of all of the computers that have been loaded wit
 >		*on* - gives the hostnames of computers loaded on a given date* (required if using on)
 >		*failed* - counts failed loads instead of successful loads (successful is the default)
 >		*all* - counts all loads instead of successful loads (successful is the default)
+>		*alphabetical* - sort displayed loads alphabetically
 >		_(Note: Slack API limits requests to 1000 messages, requests spanning long periods of time may give inaccurate counts due to this limitation)_
 >	Default:
 >		time frame for displayed hostnames is the current date and successful loads are displayed

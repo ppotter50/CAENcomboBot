@@ -398,6 +398,10 @@ while ($infinite) {
 
 						$loadlist = loadList
 
+						if ($mesob.messages.text.Contains("alphabetical")) {
+							$loadlist = $loadlist | Sort-Object
+						}
+
 						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers have been$loadtype loaded since $(@($SplitMatches)[0])")
 						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`"color`":`"$purple`",`"text`":`"$loadlist`"}]" -Method 'POST'
 						done
@@ -439,6 +443,10 @@ while ($infinite) {
 
 						$loadlist = loadList
 
+						if ($mesob.messages.text.Contains("alphabetical")) {
+							$loadlist = $loadlist | Sort-Object
+						}
+
 						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were$loadtype loaded between $(@($SplitMatches)[0]) and $(@($SplitMatches)[1])")
 						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`"color`":`"$purple`",`"text`":`"$loadlist`"}]" -Method 'POST'
 						done
@@ -479,6 +487,10 @@ while ($infinite) {
 
 						$loadlist = loadList
 
+						if ($mesob.messages.text.Contains("alphabetical")) {
+							$loadlist = $loadlist | Sort-Object
+						}
+
 						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were$loadtype loaded on $(@($SplitMatches)[0])")
 						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`"color`":`"$purple`",`"text`":`"$loadlist`"}]" -Method 'POST'
 						done
@@ -509,6 +521,10 @@ while ($infinite) {
 						$histob.messages.attachments.color | Out-File "C:\Users\Paul Potter\Downloads\DeleteThis\testing.txt"
 
 						$loadlist = loadList
+
+						if ($mesob.messages.text.Contains("alphabetical")) {
+							$loadlist = $loadlist | Sort-Object
+						}
 
 						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were$loadtype loaded today")
 						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`"color`":`"$purple`",`"text`":`"$loadlist`"}]" -Method 'POST'
