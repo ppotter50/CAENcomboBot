@@ -54,7 +54,7 @@ function setType {
 	else{
 		$badType = [System.Web.HttpUtility]::UrlEncode("Please specify if you would like to know how many were successful or how many failed by including either 'successful' or 'failed' in your message`nFor help text say 'help'")
 
-		Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$badType" -Method "POST"
+		Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$windowslogs&text=$badType" -Method "POST"
 		done
 	}
 	$type
@@ -150,7 +150,7 @@ function loadList {
 while ($infinite) {
 
 	#get message from windows-logs channel
-	$mes = Invoke-WebRequest -Uri "https://slack.com/api/groups.history?token=$token&channel=$paulstesting&count=1&inclusive=true" -Method "GET"
+	$mes = Invoke-WebRequest -Uri "https://slack.com/api/groups.history?token=$token&channel=$windowslogs&count=1&inclusive=true" -Method "GET"
 	$mesob = $mes.Content | ConvertFrom-Json
 
 	#if statements check if the message is the previous message, if the message is directed to the bot, and determines what the user wants to do
@@ -160,7 +160,7 @@ while ($infinite) {
 			#'help' command
 			if ($mesob.messages.text.Contains("help")){
 
-				Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$helpencoded" -Method "POST"
+				Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$windowslogs&text=$helpencoded" -Method "POST"
 				done
 
 			}
@@ -182,7 +182,7 @@ while ($infinite) {
 
 							$wrongQuan = [System.Web.HttpUtility]::UrlEncode("The wrong number of dates has been entered`nFor the 'how many since' command one date is required`nFor help text say 'help'")
 
-							Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$wrongQuan" -Method "POST"
+							Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$windowslogs&text=$wrongQuan" -Method "POST"
 							done
 
 						}
@@ -200,7 +200,7 @@ while ($infinite) {
 
 						#output result to Slack channel
 						$countResult = [System.Web.HttpUtility]::UrlEncode("There have been $count $type loads since $(@($SplitMatches)[0])")
-						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$countResult" -Method "POST"
+						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$windowslogs&text=$countResult" -Method "POST"
 						done
 
 					}
@@ -209,7 +209,7 @@ while ($infinite) {
 
 						$badDate = [System.Web.HttpUtility]::UrlEncode("The date entered did not have the proper formatting or there was no date entered, please enter a date in mm/dd/yyyy or mm-dd-yyyy format`nFor help text say 'help'")
 
-						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$badDate" -Method "POST"
+						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$windowslogs&text=$badDate" -Method "POST"
 						done
 
 					}
@@ -226,7 +226,7 @@ while ($infinite) {
 
 							$wrongQuan = [System.Web.HttpUtility]::UrlEncode("The wrong number of dates has been entered`nFor the 'how many between' command two dates are required`nFor help text say 'help'")
 
-							Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$wrongQuan" -Method "POST"
+							Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$windowslogs&text=$wrongQuan" -Method "POST"
 							done
 
 						}
@@ -245,7 +245,7 @@ while ($infinite) {
 
 						#output result to Slack channel
 						$countResult = [System.Web.HttpUtility]::UrlEncode("There were $count $type loads between $(@($SplitMatches)[0]) and $(@($SplitMatches)[1])")
-						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$countResult" -Method "POST"
+						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$windowslogs&text=$countResult" -Method "POST"
 						done
 					}
 					#response if no date was entered
@@ -253,7 +253,7 @@ while ($infinite) {
 
 						$badDate = [System.Web.HttpUtility]::UrlEncode("The date entered did not have the proper formatting or there was no date entered, please enter a date in mm/dd/yyyy or mm-dd-yyyy format`nFor help text say 'help'")
 
-						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$badDate" -Method "POST"
+						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$windowslogs&text=$badDate" -Method "POST"
 						done
 
 					}
@@ -271,7 +271,7 @@ while ($infinite) {
 
 							$wrongQuan = [System.Web.HttpUtility]::UrlEncode("The wrong number of dates has been entered`nFor the 'how many on' command one date is required`nFor help text say 'help'")
 
-							Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$wrongQuan" -Method "POST"
+							Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$windowslogs&text=$wrongQuan" -Method "POST"
 							done
 
 						}
@@ -290,7 +290,7 @@ while ($infinite) {
 
 						#output result to Slack channel
 						$countResult = [System.Web.HttpUtility]::UrlEncode("There were $count $type loads on $(@($SplitMatches)[0])")
-						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$countResult" -Method "POST"
+						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$windowslogs&text=$countResult" -Method "POST"
 						done
 					}
 					#response if no date was entered
@@ -298,7 +298,7 @@ while ($infinite) {
 
 						$badDate = [System.Web.HttpUtility]::UrlEncode("The date entered did not have the proper formatting or there was no date entered, please enter a date in mm/dd/yyyy or mm-dd-yyyy format`nFor help text say 'help'")
 
-						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$badDate" -Method "POST"
+						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$windowslogs&text=$badDate" -Method "POST"
 						done
 
 					}
@@ -310,7 +310,7 @@ while ($infinite) {
 					#send message if the wrong number of dates was entered
 					if ($mesob.messages.text -match "(\d\d|\d)(\/|-)(\d\d|\d)(\/|-)(\d\d\d\d|\d\d)") {
 						$hasdateencode = [System.Web.HttpUtility]::UrlEncode("It appears you have included a date but no sub command, if you would like to specify a date please include a sub command.`nFor help text say 'help'")
-						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$hasdateencode" -Method "POST"
+						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$windowslogs&text=$hasdateencode" -Method "POST"
 						done
 					}
 
@@ -329,7 +329,7 @@ while ($infinite) {
 
 						#display message
 						$countResult = [System.Web.HttpUtility]::UrlEncode("There have been $count $type loads today")
-						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$countResult" -Method "POST"
+						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$windowslogs&text=$countResult" -Method "POST"
 						done
 					}
 				}
@@ -374,7 +374,7 @@ while ($infinite) {
 
 				$nameString = $active -join '\n'
 				$encodedActive = [System.Web.HttpUtility]::UrlEncode("There are currently $count active loads. The hostnames of these loads are as follows")
-				Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$encodedActive&attachments[{`"color`":`"000000`",`"text`":`"$nameString`"}]"
+				Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$windowslogs&text=$encodedActive&attachments[{`"color`":`"000000`",`"text`":`"$nameString`"}]"
 				done
 
 			}
@@ -396,7 +396,7 @@ while ($infinite) {
 
 							$wrongQuan = [System.Web.HttpUtility]::UrlEncode("The wrong number of dates has been entered`nFor the 'how many since' command one date is required`nFor help text say 'help'")
 
-							Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$wrongQuan" -Method "POST"
+							Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$windowslogs&text=$wrongQuan" -Method "POST"
 							done
 
 						}
@@ -412,7 +412,7 @@ while ($infinite) {
 
 						#encode and output message
 						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers have been$loadtype loaded since $(@($SplitMatches)[0])")
-						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`"color`":`"$purple`",`"text`":`"$loadlist`"}]" -Method 'POST'
+						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$windowslogs&text=$loadencode&attachments=[{`"color`":`"$purple`",`"text`":`"$loadlist`"}]" -Method 'POST'
 						done
 
 					}
@@ -422,7 +422,7 @@ while ($infinite) {
 
 						$badDate = [System.Web.HttpUtility]::UrlEncode("The date entered did not have the proper formatting or there was no date entered, please enter a date in mm/dd/yyyy or mm-dd-yyyy format`nFor help text say 'help'")
 
-						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$badDate" -Method "POST"
+						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$windowslogs&text=$badDate" -Method "POST"
 						done
 
 					}
@@ -439,7 +439,7 @@ while ($infinite) {
 
 							$wrongQuan = [System.Web.HttpUtility]::UrlEncode("The wrong number of dates has been entered`nFor the 'how many between' command two dates are required`nFor help text say 'help'")
 
-							Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$wrongQuan" -Method "POST"
+							Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$windowslogs&text=$wrongQuan" -Method "POST"
 							done
 
 						}
@@ -456,7 +456,7 @@ while ($infinite) {
 
 						#encode and output message
 						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were$loadtype loaded between $(@($SplitMatches)[0]) and $(@($SplitMatches)[1])")
-						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`"color`":`"$purple`",`"text`":`"$loadlist`"}]" -Method 'POST'
+						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$windowslogs&text=$loadencode&attachments=[{`"color`":`"$purple`",`"text`":`"$loadlist`"}]" -Method 'POST'
 						done
 					}
 
@@ -465,7 +465,7 @@ while ($infinite) {
 
 						$badDate = [System.Web.HttpUtility]::UrlEncode("The date entered did not have the proper formatting or there was no date entered, please enter a date in mm/dd/yyyy or mm-dd-yyyy format`nFor help text say 'help'")
 
-						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$badDate" -Method "POST"
+						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$windowslogs&text=$badDate" -Method "POST"
 						done
 
 					}
@@ -482,7 +482,7 @@ while ($infinite) {
 
 							$wrongQuan = [System.Web.HttpUtility]::UrlEncode("The wrong number of dates has been entered`nFor the 'how many on' command one date is required`nFor help text say 'help'")
 
-							Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$wrongQuan" -Method "POST"
+							Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$windowslogs&text=$wrongQuan" -Method "POST"
 							done
 
 						}
@@ -499,7 +499,7 @@ while ($infinite) {
 
 						#encode and output message
 						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were$loadtype loaded on $(@($SplitMatches)[0])")
-						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`"color`":`"$purple`",`"text`":`"$loadlist`"}]" -Method 'POST'
+						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$windowslogs&text=$loadencode&attachments=[{`"color`":`"$purple`",`"text`":`"$loadlist`"}]" -Method 'POST'
 						done
 					}
 
@@ -508,7 +508,7 @@ while ($infinite) {
 
 						$badDate = [System.Web.HttpUtility]::UrlEncode("The date entered did not have the proper formatting or there was no date entered, please enter a date in mm/dd/yyyy or mm-dd-yyyy format`nFor help text say 'help'")
 
-						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$badDate" -Method "POST"
+						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$windowslogs&text=$badDate" -Method "POST"
 						done
 
 					}
@@ -518,7 +518,7 @@ while ($infinite) {
 					#send message if the wrong number of dates was entered
 					if ($mesob.messages.text -match "(\d\d|\d)(\/|-)(\d\d|\d)(\/|-)(\d\d\d\d|\d\d)") {
 						$hasdateencode = [System.Web.HttpUtility]::UrlEncode("It appears you have included a date but no sub command, if you would like to specify a date please include a sub command.`nFor help text say 'help'")
-						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$hasdateencode" -Method "POST"
+						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$windowslogs&text=$hasdateencode" -Method "POST"
 						done
 					}
 					else {
@@ -535,7 +535,7 @@ while ($infinite) {
 
 						#encode and output message
 						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were$loadtype loaded today")
-						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`"color`":`"$purple`",`"text`":`"$loadlist`"}]" -Method 'POST'
+						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$windowslogs&text=$loadencode&attachments=[{`"color`":`"$purple`",`"text`":`"$loadlist`"}]" -Method 'POST'
 						done
 					}
 				}
@@ -544,7 +544,7 @@ while ($infinite) {
 			#no valid command entered
 			else {
 				$nocommand = [System.Web.HttpUtility]::UrlEncode("No known command was entered.`nFor help text enter the command 'help'`nTo request that the command you tried be added email pauljp@umich.edu and I will do my best to add that functionality")
-				Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$nocommand" -Method 'POST'
+				Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$windowslogs&text=$nocommand" -Method 'POST'
 				done
 			}
 		}
