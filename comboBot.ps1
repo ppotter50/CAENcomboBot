@@ -63,7 +63,7 @@ function setType {
 #function that actually counts the loads
 function howmanyCount {
 	if ($mesob.messages.text.Contains("successful")) {
-		for ($n=0;$n -le $histob.messages.attachments.color.Length; $n++) {
+		for ($n=0;$n -lt $histob.messages.attachments.color.Length; $n++) {
 			if ($histob.messages.attachments.color[$n] -eq $green) {
 
 				$count++
@@ -72,7 +72,7 @@ function howmanyCount {
 		}
 	}
 	elseif ($mesob.messages.text.Contains("failed")) {
-		for ($n=0;$n -le $histob.messages.attachments.color.Length; $n++) {
+		for ($n=0;$n -lt $histob.messages.attachments.color.Length; $n++) {
 			if ($histob.messages.attachments.color[$n] -eq $red) {
 
 				$count++
@@ -87,13 +87,13 @@ function howmanyCount {
 function loadList {
 	if ($mesob.messages.text.Contains("failed")) {
 		$Script:loadtype = " unsuccessfully"
-		for ($eye=0;$eye -le $histob.messages.attachments.color.Length;$eye++){
+		for ($eye=0;$eye -lt $histob.messages.attachments.color.Length;$eye++){
 			if ($histob.messages.attachments.color[$eye] -eq $red) {
 				$fullText = $histob.messages.attachments.text[$eye].Split(' ')
 				$simpleText = $fullText[0]
 				[void]$loads.Add($simpleText)
 				if ($mesob.messages.text.Contains("remove doubles")) {
-					for ($nose=$eye+1;$nose -le $histob.messages.attachments.color.Length;$nose++) {
+					for ($nose=$eye+1;$nose -lt $histob.messages.attachments.color.Length;$nose++) {
 						if ($histob.messages[$nose].attachments[0].text.Contains($simpleText)) {
 							$histob.messages[$nose].attachments[0].color = "000000"
 						}
@@ -104,13 +104,13 @@ function loadList {
 	}
 	elseif ($mesob.messages.text.Contains("all")) {
 		$Script:loadtype = ""
-		for ($eye=0;$eye -le $histob.messages.attachments.color.Length;$eye++){
+		for ($eye=0;$eye -lt $histob.messages.attachments.color.Length;$eye++){
 			if ($histob.messages.attachments.color[$eye] -eq $blue) {
 				$fullText = $histob.messages.attachments.text[$eye].Split(' ')
 				$simpleText = $fullText[0]
 				[void]$loads.Add($simpleText)
 				if ($mesob.messages.text.Contains("remove doubles")) {
-					for ($nose=$eye+1;$nose -le $histob.messages.attachments.color.Length;$nose++) {
+					for ($nose=$eye+1;$nose -lt $histob.messages.attachments.color.Length;$nose++) {
 						if ($histob.messages[$nose].attachments[0].text.Contains($simpleText)) {
 							$histob.messages[$nose].attachments[0].color = "000000"
 						}
@@ -121,13 +121,13 @@ function loadList {
 	}
 	else {
 		$Script:loadtype = " successfully"
-		for ($eye=0;$eye -le $histob.messages.attachments.color.Length;$eye++){
+		for ($eye=0;$eye -lt $histob.messages.attachments.color.Length;$eye++){
 			if ($histob.messages.attachments.color[$eye] -eq $green) {
 				$fullText = $histob.messages.attachments.text[$eye].Split(' ')
 				$simpleText = $fullText[0]
 				[void]$loads.Add($simpleText)
 				if ($mesob.messages.text.Contains("remove doubles")) {
-					for ($nose=$eye+1;$nose -le $histob.messages.attachments.color.Length;$nose++) {
+					for ($nose=$eye+1;$nose -lt $histob.messages.attachments.color.Length;$nose++) {
 						if ($histob.messages[$nose].attachments[0].text.Contains($simpleText)) {
 							$histob.messages[$nose].attachments[0].color = "000000"
 						}
@@ -345,11 +345,11 @@ while ($infinite) {
 				$hist = Invoke-WebRequest -Uri "https://slack.com/api/channels.history?token=$token&channel=$windowslogs&oldest=$date&count=1000&inclusive=true"
 				$histob = $hist.Content | ConvertFrom-Json
 
-				:skipCount for ($n=0; $n -le $histob.length; $n++) {
+				:skipCount for ($n=0; $n -lt $histob.length; $n++) {
 					if ($histob.messages.text[$n] -match '\w{8}-\w{4}-\w{4}-\w{4}-\w{12}') {
 
 						$GUID = $histob.messages.text[$n]
-						for ($g=$n+1;$g -le $histob.length; $g++) {
+						for ($g=$n+1;$g -lt $histob.length; $g++) {
 							if ($histob.messages.text[$g] -eq $GUID) {
 
 								$histob.messages.text[$g] = ''
