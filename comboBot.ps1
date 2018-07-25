@@ -84,6 +84,7 @@ function howmanyCount {
 	$count
 }
 
+#function that generates the list of loaded computers
 function loadList {
 	if ($mesob.messages.text.Contains("failed")) {
 		$Script:loadtype = " unsuccessfully"
@@ -306,15 +307,19 @@ while ($infinite) {
 
 				#default 'how many' behavior
 				else {
+					#send message if the wrong number of dates was entered
 					if ($mesob.messages.text -match "(\d\d|\d)(\/|-)(\d\d|\d)(\/|-)(\d\d\d\d|\d\d)") {
 						$hasdateencode = [System.Web.HttpUtility]::UrlEncode("It appears you have included a date but no sub command, if you would like to specify a date please include a sub command.`nFor help text say 'help'")
 						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$hasdateencode" -Method "POST"
 						done
 					}
+
 					else {
+						#get date in UNIX time
 						$startdate = Get-Date -Hour 00 -Minute 01 -UFormat %s
 						$enddate = Get-Date -Hour 23 -Minute 59 -Uformat %s
 
+						#pull history
 						$hist = Invoke-WebRequest "https://slack.com/api/channels.history?token=$token&channel=$windowslogs&count=1000&oldest=$enddate&latest=$startdate&inclusive=true" -Method "GET"
 						$histob = $hist.Content | ConvertFrom-Json
 
@@ -322,6 +327,7 @@ while ($infinite) {
 
 						$count = howmanyCount
 
+						#display message
 						$countResult = [System.Web.HttpUtility]::UrlEncode("There have been $count $type loads today")
 						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$countResult" -Method "POST"
 						done
@@ -385,6 +391,7 @@ while ($infinite) {
 
 						$SplitMatches = Select-String "(\d\d|\d)(\/|-)(\d\d|\d)(\/|-)(\d\d\d\d|\d\d)" -input $mesob.messages.text -AllMatches | ForEach-Object{$_.matches.value}
 
+						#send message if the wrong number of dates was entered
 						if (@($SplitMatches).Length -ne 1) {
 
 							$wrongQuan = [System.Web.HttpUtility]::UrlEncode("The wrong number of dates has been entered`nFor the 'how many since' command one date is required`nFor help text say 'help'")
@@ -403,12 +410,14 @@ while ($infinite) {
 
 						$loadlist = loadList
 
+						#encode and output message
 						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers have been$loadtype loaded since $(@($SplitMatches)[0])")
 						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`"color`":`"$purple`",`"text`":`"$loadlist`"}]" -Method 'POST'
 						done
 
 					}
 
+					#message if no date is entered
 					elseif ($mesob.messages.text -NotMatch "(\d\d|\d)(\/|-)(\d\d|\d)(\/|-)(\d\d\d\d|\d\d)") {
 
 						$badDate = [System.Web.HttpUtility]::UrlEncode("The date entered did not have the proper formatting or there was no date entered, please enter a date in mm/dd/yyyy or mm-dd-yyyy format`nFor help text say 'help'")
@@ -425,6 +434,7 @@ while ($infinite) {
 
 						$SplitMatches = Select-String "(\d\d|\d)(\/|-)(\d\d|\d)(\/|-)(\d\d\d\d|\d\d)" -input $mesob.messages.text -AllMatches | ForEach-Object{$_.matches.value}
 
+						#send message if the wrong number of dates was entered
 						if (@($SplitMatches).Length -ne 2) {
 
 							$wrongQuan = [System.Web.HttpUtility]::UrlEncode("The wrong number of dates has been entered`nFor the 'how many between' command two dates are required`nFor help text say 'help'")
@@ -444,11 +454,13 @@ while ($infinite) {
 
 						$loadlist = loadList
 
+						#encode and output message
 						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were$loadtype loaded between $(@($SplitMatches)[0]) and $(@($SplitMatches)[1])")
 						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`"color`":`"$purple`",`"text`":`"$loadlist`"}]" -Method 'POST'
 						done
 					}
 
+					#message if no date is entered
 					elseif ($mesob.messages.text -NotMatch "(\d\d|\d)(\/|-)(\d\d|\d)(\/|-)(\d\d\d\d|\d\d)") {
 
 						$badDate = [System.Web.HttpUtility]::UrlEncode("The date entered did not have the proper formatting or there was no date entered, please enter a date in mm/dd/yyyy or mm-dd-yyyy format`nFor help text say 'help'")
@@ -465,6 +477,7 @@ while ($infinite) {
 
 						$SplitMatches = Select-String "(\d\d|\d)(\/|-)(\d\d|\d)(\/|-)(\d\d\d\d|\d\d)" -input $mesob.messages.text -AllMatches | ForEach-Object{$_.matches.value}
 
+						#send message if the wrong number of dates was entered
 						if (@($SplitMatches).Length -ne 1) {
 
 							$wrongQuan = [System.Web.HttpUtility]::UrlEncode("The wrong number of dates has been entered`nFor the 'how many on' command one date is required`nFor help text say 'help'")
@@ -484,11 +497,13 @@ while ($infinite) {
 
 						$loadlist = loadList
 
+						#encode and output message
 						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were$loadtype loaded on $(@($SplitMatches)[0])")
 						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`"color`":`"$purple`",`"text`":`"$loadlist`"}]" -Method 'POST'
 						done
 					}
 
+					#message if no date is entered
 					elseif ($mesob.messages.text -NotMatch "(\d\d|\d)(\/|-)(\d\d|\d)(\/|-)(\d\d\d\d|\d\d)") {
 
 						$badDate = [System.Web.HttpUtility]::UrlEncode("The date entered did not have the proper formatting or there was no date entered, please enter a date in mm/dd/yyyy or mm-dd-yyyy format`nFor help text say 'help'")
@@ -500,21 +515,25 @@ while ($infinite) {
 				}
 
 				else {
+					#send message if the wrong number of dates was entered
 					if ($mesob.messages.text -match "(\d\d|\d)(\/|-)(\d\d|\d)(\/|-)(\d\d\d\d|\d\d)") {
 						$hasdateencode = [System.Web.HttpUtility]::UrlEncode("It appears you have included a date but no sub command, if you would like to specify a date please include a sub command.`nFor help text say 'help'")
 						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$hasdateencode" -Method "POST"
 						done
 					}
 					else {
+						#get UNIX dates
 						$startdate = Get-Date -Hour 00 -Minute 01 -UFormat %s
 						$enddate = Get-Date -Hour 23 -Minute 59 -UFormat %s
 
+						#pull history
 						$hist = Invoke-WebRequest "https://slack.com/api/channels.history?token=$token&channel=$windowslogs&count=1000&oldest=$startdate&latest=$enddate&inclusive=true" -Method "GET"
 						$histob = $hist.Content | ConvertFrom-Json
 						$histob.messages.attachments.color | Out-File "C:\Users\Paul Potter\Downloads\DeleteThis\testing.txt"
 
 						$loadlist = loadList
 
+						#encode and output message
 						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were$loadtype loaded today")
 						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`"color`":`"$purple`",`"text`":`"$loadlist`"}]" -Method 'POST'
 						done
@@ -522,6 +541,7 @@ while ($infinite) {
 				}
 			}
 
+			#no valid command entered
 			else {
 				$nocommand = [System.Web.HttpUtility]::UrlEncode("No known command was entered.`nFor help text enter the command 'help'`nTo request that the command you tried be added email pauljp@umich.edu and I will do my best to add that functionality")
 				Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$nocommand" -Method 'POST'
