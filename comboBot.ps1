@@ -32,7 +32,7 @@ for ($n=0; $n -lt $userob.members.id.Length; $n++) {
 Get-Content .\variables\uservar.ps1 | ForEach-Object {$_ -replace '-',''} | Out-File .\variables\uservar-fixed.ps1
 
 #load variables from generated files
-$paulstesting = 'GBS051B28' #for testing
+#$paulstesting = 'GBS051B28' #for testing
 . .\variables\channelvar-fixed.ps1
 . .\variables\uservar-fixed.ps1
 
