@@ -94,7 +94,7 @@ function loadList {
 				[void]$loads.Add($simpleText)
 				if ($mesob.messages.text.Contains("remove doubles")) {
 					for ($nose=$eye+1;$nose -le $histob.messages.attachments.color.Length;$nose++) {
-						if ($histob.messages.attachments.text[$nose].Contains($simpleText)) {
+						if ($histob.messages[$nose].attachments[0].text.Contains($simpleText)) {
 							$histob.messages[$nose].attachments[0].color = "000000"
 						}
 					}
@@ -111,7 +111,7 @@ function loadList {
 				[void]$loads.Add($simpleText)
 				if ($mesob.messages.text.Contains("remove doubles")) {
 					for ($nose=$eye+1;$nose -le $histob.messages.attachments.color.Length;$nose++) {
-						if ($histob.messages.attachments.text[$nose].Contains($simpleText)) {
+						if ($histob.messages[$nose].attachments[0].text.Contains($simpleText)) {
 							$histob.messages[$nose].attachments[0].color = "000000"
 						}
 					}
@@ -128,7 +128,7 @@ function loadList {
 				[void]$loads.Add($simpleText)
 				if ($mesob.messages.text.Contains("remove doubles")) {
 					for ($nose=$eye+1;$nose -le $histob.messages.attachments.color.Length;$nose++) {
-						if ($histob.messages.attachments.text[$nose].Contains($simpleText)) {
+						if ($histob.messages[$nose].attachments[0].text.Contains($simpleText)) {
 							$histob.messages[$nose].attachments[0].color = "000000"
 						}
 					}
@@ -136,6 +136,11 @@ function loadList {
 			}
 		}
 	}
+
+	if ($mesob.messages.text.Contains("alphabetical")) {
+		$loads = $loads | Sort-Object
+	}
+
 	$loadsout = $loads -join "\n"
 	$loadsout
 }
@@ -398,10 +403,6 @@ while ($infinite) {
 
 						$loadlist = loadList
 
-						if ($mesob.messages.text.Contains("alphabetical")) {
-							$loadlist = $loadlist | Sort-Object
-						}
-
 						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers have been$loadtype loaded since $(@($SplitMatches)[0])")
 						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`"color`":`"$purple`",`"text`":`"$loadlist`"}]" -Method 'POST'
 						done
@@ -443,10 +444,6 @@ while ($infinite) {
 
 						$loadlist = loadList
 
-						if ($mesob.messages.text.Contains("alphabetical")) {
-							$loadlist = $loadlist | Sort-Object
-						}
-
 						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were$loadtype loaded between $(@($SplitMatches)[0]) and $(@($SplitMatches)[1])")
 						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`"color`":`"$purple`",`"text`":`"$loadlist`"}]" -Method 'POST'
 						done
@@ -487,10 +484,6 @@ while ($infinite) {
 
 						$loadlist = loadList
 
-						if ($mesob.messages.text.Contains("alphabetical")) {
-							$loadlist = $loadlist | Sort-Object
-						}
-
 						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were$loadtype loaded on $(@($SplitMatches)[0])")
 						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`"color`":`"$purple`",`"text`":`"$loadlist`"}]" -Method 'POST'
 						done
@@ -521,10 +514,6 @@ while ($infinite) {
 						$histob.messages.attachments.color | Out-File "C:\Users\Paul Potter\Downloads\DeleteThis\testing.txt"
 
 						$loadlist = loadList
-
-						if ($mesob.messages.text.Contains("alphabetical")) {
-							$loadlist = $loadlist | Sort-Object
-						}
 
 						$loadencode = [System.Web.HttpUtility]::UrlEncode("The following computers were$loadtype loaded today")
 						Invoke-WebRequest -Uri "https://slack.com/api/chat.postMessage?token=$token&channel=$paulstesting&text=$loadencode&attachments=[{`"color`":`"$purple`",`"text`":`"$loadlist`"}]" -Method 'POST'
